@@ -31,26 +31,26 @@ async function validateOptions(options) {
   if (!fs.existsSync(options.input)) {
     throw new Error(`Input file not found: ${options.input}`);
   }
-  
+
   // Check if input file is a PDF
   if (!options.input.toLowerCase().endsWith('.pdf')) {
     throw new Error('Input file must be a PDF');
   }
-  
+
   // Set default output file if not provided
   if (!options.output) {
     const inputPath = path.parse(options.input);
     options.output = path.join(inputPath.dir, `${inputPath.name}-compressed.pdf`);
     console.log(chalk.yellow(`No output specified, using: ${options.output}`));
   }
-  
+
   // Validate compression level
   const level = parseInt(options.level);
-  if (isNaN(level) || level < 1 || level > 4) {
-    throw new Error('Compression level must be between 1 and 4');
+  if (isNaN(level) || level < 1 || level > 5) {
+    throw new Error('Compression level must be between 1 and 5');
   }
   options.level = level;
-  
+
   return options;
 }
 
@@ -58,18 +58,18 @@ async function validateOptions(options) {
 async function compressPdf(options) {
   try {
     const { input, output, level, verbose } = await validateOptions(options);
-    
+
     console.log(chalk.blue('Starting PDF compression...'));
     console.log(chalk.gray(`Input: ${input}`));
     console.log(chalk.gray(`Output: ${output}`));
     console.log(chalk.gray(`Compression level: ${level}`));
-    
+
     // Get the input file size
     const inputStats = fs.statSync(input);
     const inputSizeBytes = inputStats.size;
     const inputSizeMB = (inputSizeBytes / 1024 / 1024).toFixed(2);
     console.log(chalk.gray(`Input file size: ${inputSizeMB} MB`));
-    
+
     // Create a progress bar
     const progressBar = new cliProgress.SingleBar({
       format: 'Compressing |' + chalk.cyan('{bar}') + '| {percentage}% || {value}/{total}',
@@ -77,38 +77,38 @@ async function compressPdf(options) {
       barIncompleteChar: '\u2591',
       hideCursor: true
     });
-    
+
     // Start the progress bar with an indeterminate state
     progressBar.start(100, 0);
-    
+
     try {
       // Prepare Ghostscript options
       const gsOptions = getGsOptionsForLevel(level);
-      
+
       // Add output file parameter with -sOutputFile format
       gsOptions.push(`-sOutputFile=${output}`);
-      
+
       // Add input file as the last parameter
       gsOptions.push(input);
-      
+
       if (verbose) {
         console.log(chalk.gray('Ghostscript command:'), 'gs', gsOptions.join(' '));
       }
-      
+
       // Execute Ghostscript using child_process.spawn
       return new Promise((resolve, reject) => {
         // Execute Ghostscript
         const gsProcess = spawn('gs', gsOptions);
-        
+
         let stdoutData = '';
         let stderrData = '';
-        
+
         // Update progress periodically as Ghostscript works
         const progressUpdater = setInterval(() => {
           const progress = Math.min(progressBar.value + 5, 99);
           progressBar.update(progress);
         }, 200);
-        
+
         // Capture stdout data
         gsProcess.stdout.on('data', (data) => {
           stdoutData += data.toString();
@@ -116,7 +116,7 @@ async function compressPdf(options) {
             console.log(chalk.gray(`GS stdout: ${data.toString().trim()}`));
           }
         });
-        
+
         // Capture stderr data
         gsProcess.stderr.on('data', (data) => {
           stderrData += data.toString();
@@ -124,16 +124,16 @@ async function compressPdf(options) {
             console.log(chalk.yellow(`GS stderr: ${data.toString().trim()}`));
           }
         });
-        
+
         // Handle process completion
         gsProcess.on('close', (code) => {
           clearInterval(progressUpdater);
-          
+
           if (code === 0) {
             // Update progress bar to completion and stop it
             progressBar.update(100);
             progressBar.stop();
-            
+
             // Get the output file size and calculate compression ratio
             if (fs.existsSync(output)) {
               const outputStats = fs.statSync(output);
@@ -141,7 +141,7 @@ async function compressPdf(options) {
               const outputSizeMB = (outputSizeBytes / 1024 / 1024).toFixed(2);
               const compressionRatio = (inputSizeBytes / outputSizeBytes).toFixed(2);
               const spaceSaved = ((1 - outputSizeBytes / inputSizeBytes) * 100).toFixed(1);
-              
+
               console.log(chalk.green('\nPDF compression completed successfully!'));
               console.log(chalk.gray(`Output file size: ${outputSizeMB} MB`));
               console.log(chalk.blue(`Compression ratio: ${compressionRatio}x (${spaceSaved}% smaller)`));
@@ -154,12 +154,12 @@ async function compressPdf(options) {
             reject(new Error(`Ghostscript exited with code ${code}: ${stderrData}`));
           }
         });
-        
+
         // Handle process errors
         gsProcess.on('error', (err) => {
           clearInterval(progressUpdater);
           progressBar.stop();
-          
+
           if (err.code === 'ENOENT') {
             reject(new Error('Ghostscript (gs) executable not found. Please make sure Ghostscript is installed on your system.'));
           } else {
@@ -191,7 +191,7 @@ function getGsOptionsForLevel(level) {
     '-dBATCH',
     '-dSAFER'
   ];
-  
+
   // Adjust settings based on compression level
   switch (level) {
     case 1: // Level 1: Light compression, highest quality
@@ -211,7 +211,7 @@ function getGsOptionsForLevel(level) {
         '-dGrayImageFilter=/DCTEncode',
         '-dJPEGQ=95'  // High quality JPEG
       ];
-    
+
     case 2: // Level 2: Medium compression, good quality
       return [
         ...baseOptions,
@@ -229,8 +229,26 @@ function getGsOptionsForLevel(level) {
         '-dGrayImageFilter=/DCTEncode',
         '-dJPEGQ=85'  // Good quality JPEG
       ];
-    
-    case 3: // Level 3: High compression, reduced quality (default)
+
+      case 3: // Level 3: Medium compression, reduced quality (default)
+        return [
+          ...baseOptions,
+          '-dPDFSETTINGS=/ebook',
+          '-dCompatibilityLevel=1.5',
+          '-dColorImageResolution=110',
+          '-dGrayImageResolution=110',
+          '-dMonoImageResolution=150',
+          '-dColorImageDownsampleType=/Average',
+          '-dGrayImageDownsampleType=/Average',
+          '-dMonoImageDownsampleType=/Bicubic',
+          '-dAutoFilterColorImages=true',
+          '-dAutoFilterGrayImages=true',
+          '-dColorImageFilter=/DCTEncode',
+          '-dGrayImageFilter=/DCTEncode',
+          '-dJPEGQ=80'  // Standard quality JPEG
+        ];
+
+    case 4: // Level 3: High compression, reduced quality (default)
       return [
         ...baseOptions,
         '-dPDFSETTINGS=/ebook',
@@ -247,8 +265,8 @@ function getGsOptionsForLevel(level) {
         '-dGrayImageFilter=/DCTEncode',
         '-dJPEGQ=75'  // Standard quality JPEG
       ];
-    
-    case 4: // Level 4: Maximum compression, lowest quality
+
+    case 5: // Level 4: Maximum compression, lowest quality
       return [
         ...baseOptions,
         '-dPDFSETTINGS=/screen',
@@ -271,7 +289,7 @@ function getGsOptionsForLevel(level) {
         '-dDetectDuplicateImages=true',
         '-dOptimize=true'
       ];
-    
+
     default:
       // Default to level 3 if an invalid level is provided
       return getGsOptionsForLevel(3);
@@ -280,4 +298,3 @@ function getGsOptionsForLevel(level) {
 
 // Execute the main function
 compressPdf(options);
-

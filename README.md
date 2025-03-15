@@ -80,7 +80,7 @@ If installed locally, run:
 |--------|-------------|
 | `-i, --input <file>` | Input PDF file (required) |
 | `-o, --output <file>` | Output PDF file (optional, defaults to input-compressed.pdf) |
-| `-l, --level <1-4>` | Compression level (optional, defaults to 3) |
+| `-l, --level <1-5>` | Compression level (optional, defaults to 3) |
 | `-v, --verbose` | Show detailed processing information |
 | `-h, --help` | Display help information |
 
@@ -93,17 +93,22 @@ PDF-Shrinker offers four compression levels:
 - Minimal file size reduction
 - Ideal for: Documents with many high-quality images that must remain high-resolution
 
-#### Level 2: Medium Compression
+#### Level 2: Lower Compression
 - Good quality output
 - Moderate file size reduction
 - Ideal for: General purpose documents with mixed content
 
-#### Level 3: High Compression (default)
+#### Level 3: Medium Compression (default)
+- Average quality but still acceptable for most purposes
+- Significant file size reduction
+- Ideal for: Documents that need to be emailed or stored with limited space
+
+#### Level 4: Higher Compression
 - Reduced quality but still acceptable for most purposes
 - Significant file size reduction
 - Ideal for: Documents that need to be emailed or stored with limited space
 
-#### Level 4: Maximum Compression
+#### Level 5: Maximum Compression
 - Lowest quality
 - Maximum file size reduction
 - Ideal for: Archiving, when file size is critical and some quality loss is acceptable
@@ -169,4 +174,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
