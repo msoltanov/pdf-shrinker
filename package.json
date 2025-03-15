@@ -1,0 +1,26 @@
+{
+  "name": "pdf-shrinker",
+  "version": "1.0.0-beta.1",
+  "description": "A command-line tool for shrinking and optimizing PDF files using Ghostscript",
+  "main": "index.js",
+  "bin": {
+    "pdf-shrinker": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Mekan Soltanow <mknsltnw@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.12.0",
+    "commander": "^13.1.0"
+  }
+}
