@@ -17,7 +17,7 @@ program
   .version('1.0.0')
   .requiredOption('-i, --input <file>', 'Input PDF file path')
   .option('-o, --output <file>', 'Output PDF file path (defaults to input-compressed.pdf)')
-  .option('-l, --level <level>', 'Compression level (1-4, where 1 is lowest compression, 4 is highest)', '3')
+  .option('-l, --level <level>', 'Compression level (1-5, where 1 is lowest compression, 5 is highest)', '3')
   .option('-v, --verbose', 'Show detailed processing information')
   .helpOption('-h, --help', 'Display help information');
 
