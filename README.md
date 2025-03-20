@@ -36,7 +36,7 @@ After installation, you can use the `pdf-shrinker` command from anywhere.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pdf-shrinker.git
+git clone https://github.com/msoltanov/pdf-shrinker.git
 cd pdf-shrinker
 
 # Install dependencies
@@ -127,10 +127,10 @@ pdf-shrinker -i large-document.pdf -o compressed-document.pdf
 pdf-shrinker -i large-document.pdf -o high-quality-compressed.pdf -l 1
 ```
 
-### Maximum Compression with Lowest Quality (Level 4)
+### Maximum Compression with Lowest Quality (Level 5)
 
 ```bash
-pdf-shrinker -i large-document.pdf -o max-compressed.pdf -l 4
+pdf-shrinker -i large-document.pdf -o max-compressed.pdf -l 5
 ```
 
 ### Verbose Mode for Debugging
@@ -145,8 +145,9 @@ Based on testing, you can expect approximately:
 
 - **Level 1**: 20-40% reduction in file size
 - **Level 2**: 40-60% reduction in file size
-- **Level 3**: 60-80% reduction in file size
-- **Level 4**: 80-95% reduction in file size
+- **Level 3**: 60-70% reduction in file size
+- **Level 4**: 70-80% reduction in file size
+- **Level 5**: 80-95% reduction in file size
 
 Actual results may vary depending on the content of your PDF files.
 
