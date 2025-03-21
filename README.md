@@ -46,6 +46,26 @@ npm install
 chmod +x index.js
 ```
 
+### Manual Package Installation (Offline)
+
+For offline/manual installation, download the following .tgz packages from the npm registry:
+
+1. Download these packages from npmjs.com:
+   - https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz
+   - https://registry.npmjs.org/cli-progress/-/cli-progress-3.12.0.tgz
+   - https://registry.npmjs.org/commander/-/commander-13.1.0.tgz
+
+2. Copy the downloaded .tgz files to your project directory
+
+3. Install each package manually:
+```bash
+npm install ./chalk-4.1.2.tgz
+npm install ./cli-progress-3.12.0.tgz
+npm install ./commander-13.1.0.tgz
+```
+
+Note: Some packages might have dependencies that need to be installed separately. Check package.json inside each .tgz file for required dependencies.
+
 ### Verify Ghostscript Installation
 
 Ensure Ghostscript is installed by running:
