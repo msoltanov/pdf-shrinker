@@ -24,14 +24,6 @@ PDF-Shrinker is a Node.js command-line utility that leverages Ghostscript to com
 
 ## Installation
 
-### Global Installation (recommended)
-
-```bash
-npm install -g pdf-shrinker
-```
-
-After installation, you can use the `pdf-shrinker` command from anywhere.
-
 ### Local Installation
 
 ```bash
