@@ -1,0 +1,52 @@
+{
+  "name": "pdf-shrinker",
+  "version": "0.0.1-beta.1",
+  "description": "A command-line tool that compresses PDF files with Ghostscript",
+  "main": "index.js",
+  "bin": {
+    "pdf-shrinker": "./index.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.js\""
+  },
+  "keywords": [
+    "pdf",
+    "compress",
+    "shrink",
+    "optimize",
+    "ghostscript",
+    "cli"
+  ],
+  "author": "Mekan Soltanow <mknsltnw@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msoltanov/pdf-shrinker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/msoltanov/pdf-shrinker/issues"
+  },
+  "homepage": "https://github.com/msoltanov/pdf-shrinker#readme",
+  "files": [
+    "index.js",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "chalk": "^6.0.0",
+    "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "prettier": "^3.9.6"
+  }
+}

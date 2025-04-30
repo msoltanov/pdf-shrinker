@@ -1,0 +1,14 @@
+node_modules/
+*.pdf
+*.PDF
+.idea/*
+.vscode/
+
+# npm
+npm-debug.log*
+*.tgz
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

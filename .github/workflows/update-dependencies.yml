@@ -1,0 +1,45 @@
+name: Update dependencies
+
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Bump all packages to latest stable versions
+        run: |
+          npx npm-check-updates@23 -u | tee ncu-report.txt
+          npm install
+
+      - name: Lint and test against updated dependencies
+        run: |
+          npx prettier --check "**/*.js"
+          npm run lint
+          npm test
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: deps/monthly-update
+          delete-branch: true
+          commit-message: 'chore(deps): update dependencies to latest stable versions'
+          title: 'chore(deps): monthly dependency update'
+          body-file: ncu-report.txt
