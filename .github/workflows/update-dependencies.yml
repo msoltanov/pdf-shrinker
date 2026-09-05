@@ -42,4 +42,4 @@ jobs:
           delete-branch: true
           commit-message: 'chore(deps): update dependencies to latest stable versions'
           title: 'chore(deps): monthly dependency update'
-          body-file: ncu-report.txt
+          body-path: ncu-report.txt
